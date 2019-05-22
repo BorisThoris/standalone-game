@@ -241,7 +241,7 @@ export default class DodgeGame extends Phaser.Scene {
       fill: "#f6ff00"
     });
 
-    this.textEntry = this.add.text(570, 340, "", {
+    this.textEntry = this.add.text(570, 340, "temp", {
       fontSize: "50px",
       fill: "#fff"
     });
