@@ -3,7 +3,7 @@ import background from "../assets/background.png";
 import spikeBall from "../assets/spikeball.png";
 import replay from "../assets/replayBtn.png";
 import powerUp from "../assets/powerUp.png";
-import touchArrow from "../assets/touchScreenKey.png";
+import touchArrow from "../assets/touchScreenKey2.png";
 
 export default class loadImages {
   constructor() {}

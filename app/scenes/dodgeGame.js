@@ -197,34 +197,40 @@ export default class DodgeGame extends Phaser.Scene {
     );
 
     //Touch Arrows
-
-    /*   Arrow Down   */
-    this.down = this.add.image(480, 613, "baseTouchKey");
-    this.down.setScale(0.18);
-    this.down.angle -= 180;
-    this.down.setInteractive();
-    this.addTouchControls(this.down, this.cursors.down);
-
     /*   Arrow Left   */
-    this.left = this.add.image(390, 613, "baseTouchKey");
-    this.left.setScale(0.18);
+    //390
+    //613
+    this.left = this.add.image(320, 330, "baseTouchKey");
+    this.left.setScale(1.25);
     this.left.angle -= 90;
     this.left.setInteractive();
     this.addTouchControls(this.left, this.cursors.left);
 
     /*   Arrow Rigth   */
-    this.right = this.add.image(570, 613, "baseTouchKey");
-    this.right.setScale(0.18);
+    //570
+    //613
+    this.right = this.add.image(960, 330, "baseTouchKey");
+    this.right.setScale(1.25);
+    this.right.opacity = 0.6;
     this.right.angle -= 270;
     this.right.setInteractive();
 
     this.addTouchControls(this.right, this.cursors.right);
 
     /*   Arrow Up   */
-    this.arrowUp = this.add.image(480, 523, "baseTouchKey");
-    this.arrowUp.setScale(0.18);
+    //480
+    //523
+    this.arrowUp = this.add.image(640, 100, "baseTouchKey");
+    this.arrowUp.setScale(0.4);
     this.arrowUp.setInteractive();
     this.addTouchControls(this.arrowUp, this.cursors.up);
+
+    /*   Arrow Down   */
+    this.down = this.add.image(640, 550, "baseTouchKey");
+    this.down.setScale(0.4);
+    this.down.angle -= 180;
+    this.down.setInteractive();
+    this.addTouchControls(this.down, this.cursors.down);
 
     //Creating this.player
     this.player = this.physics.add.sprite(
