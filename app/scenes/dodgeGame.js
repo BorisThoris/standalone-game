@@ -171,8 +171,6 @@ export default class DodgeGame extends Phaser.Scene {
     //Background
     this.add.tileSprite(1280 / 2, 720 / 2, 1280, 720, "background");
 
-    this.generateTexts();
-
     //Frame debug view
     this.frameView = this.add.graphics();
 
@@ -231,6 +229,8 @@ export default class DodgeGame extends Phaser.Scene {
     this.down.angle -= 180;
     this.down.setInteractive();
     this.addTouchControls(this.down, this.cursors.down);
+
+    this.generateTexts();
 
     //Creating this.player
     this.player = this.physics.add.sprite(
