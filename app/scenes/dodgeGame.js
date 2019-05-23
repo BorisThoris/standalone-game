@@ -265,9 +265,11 @@ export default class DodgeGame extends Phaser.Scene {
       cursor.isDown = false;
       cursor.isUp = true;
     });
-    object.on("pointerout", () => {
+    object.on("pointerout", (pointer, event) => {
       cursor.isDown = false;
       cursor.isUp = true;
+      console.log(pointer);
+      console.log(event);
     });
   }
 
