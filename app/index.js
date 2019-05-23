@@ -1,6 +1,7 @@
 // const DodgeGame = require("/scenes/dodgeGame");
 import Phaser from "./scripts/phaser.js";
 import DodgeGame from "./scenes/dodgeGame";
+import "./styles/sad.css";
 
 var config = {
   type: Phaser.CANVAS,

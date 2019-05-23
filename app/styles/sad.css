@@ -1,0 +1,16 @@
+#keys {
+  background-color: red;
+}
+
+body {
+}
+
+html {
+  white-space: nowrap;
+  overflow: auto;
+  overflow-x: auto;
+}
+
+canvas {
+  display: inline-block;
+}

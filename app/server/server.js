@@ -5,23 +5,9 @@ import exphbs from "express-handlebars";
 import request from "request-promise";
 
 const app = express(),
-  DIST_DIR = __dirname,
-  HTML_FILE = path.join(DIST_DIR, "index.html");
+  DIST_DIR = __dirname;
 
 app.use(express.static(DIST_DIR));
-
-app.get("*", (req, res) => {
-  res.sendFile(HTML_FILE);
-});
-
-app.engine(
-  ".hbs",
-  exphbs({
-    defaultLayout: "main",
-    extname: ".hbs",
-    layoutsDir: path.join(__dirname, "views/layouts")
-  })
-);
 
 // app.set("view engine", ".hbs");
 // app.set("views", path.join(__dirname, "views"));

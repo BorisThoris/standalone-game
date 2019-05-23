@@ -1,7 +1,6 @@
 import musicBack from "../assets/backMusic(2).mp3";
 import gameOver from "../assets/gameOver.mp3";
 import ooGnome from "../assets/oo.mp3";
-import arrowRight from "../assets/arrowRight.png";
 
 /* Helper, Services */
 import PlayerMover from "../help-scripts/playerMovement";
@@ -185,6 +184,19 @@ export default class DodgeGame extends Phaser.Scene {
       .create(1280, 768, "ground")
       .setScale(2)
       .refreshBody();
+
+    //Touch Arrows
+    this.down = this.add.image(480, 613, "baseTouchKey");
+    this.down.setScale(0.18);
+
+    this.left = this.add.image(390, 613, "baseTouchKey");
+    this.left.setScale(0.18);
+
+    this.right = this.add.image(570, 613, "baseTouchKey");
+    this.right.setScale(0.18);
+
+    this.arrowUp = this.add.image(480, 523, "baseTouchKey");
+    this.arrowUp.setScale(0.18);
 
     //Creating this.player
     this.player = this.physics.add.sprite(
