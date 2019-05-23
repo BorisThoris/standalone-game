@@ -185,18 +185,46 @@ export default class DodgeGame extends Phaser.Scene {
       .setScale(2)
       .refreshBody();
 
+    //Input Events
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.input.on(
+      "gameobjectup",
+      function(pointer, gameObject) {
+        gameObject.emit("clicked", gameObject);
+      },
+      this
+    );
+
     //Touch Arrows
+
+    /*   Arrow Down   */
     this.down = this.add.image(480, 613, "baseTouchKey");
     this.down.setScale(0.18);
+    this.down.angle -= 180;
+    this.down.setInteractive();
+    this.addTouchControls(this.down, this.cursors.down);
 
+    /*   Arrow Left   */
     this.left = this.add.image(390, 613, "baseTouchKey");
     this.left.setScale(0.18);
+    this.left.angle -= 90;
+    this.left.setInteractive();
+    this.addTouchControls(this.left, this.cursors.left);
 
+    /*   Arrow Rigth   */
     this.right = this.add.image(570, 613, "baseTouchKey");
     this.right.setScale(0.18);
+    this.right.angle -= 270;
+    this.right.setInteractive();
 
+    this.addTouchControls(this.right, this.cursors.right);
+
+    /*   Arrow Up   */
     this.arrowUp = this.add.image(480, 523, "baseTouchKey");
     this.arrowUp.setScale(0.18);
+    this.arrowUp.setInteractive();
+    this.addTouchControls(this.arrowUp, this.cursors.up);
 
     //Creating this.player
     this.player = this.physics.add.sprite(
@@ -220,17 +248,21 @@ export default class DodgeGame extends Phaser.Scene {
     //Collisions
     this.settupPhysics();
     this.player.setSize(600, this.playerHeight, true);
+  }
 
-    //Input Events
-    this.cursors = this.input.keyboard.createCursorKeys();
-
-    this.input.on(
-      "gameobjectup",
-      function(pointer, gameObject) {
-        gameObject.emit("clicked", gameObject);
-      },
-      this
-    );
+  addTouchControls(object, cursor) {
+    object.on("pointerdown", () => {
+      cursor.isDown = true;
+      cursor.isUp = false;
+    });
+    object.on("pointerup", () => {
+      cursor.isDown = false;
+      cursor.isUp = true;
+    });
+    object.on("pointerout", () => {
+      cursor.isDown = false;
+      cursor.isUp = true;
+    });
   }
 
   updateFrameView() {}

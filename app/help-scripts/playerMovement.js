@@ -41,6 +41,7 @@ export default class playerMover {
 
   playerMovment(cursors) {
     this.cursors = cursors;
+
     let touchingDown = this.player.body.touching.down;
     let cursorRight = this.cursors.right.isDown;
     let cursorLeft = this.cursors.left.isDown;
