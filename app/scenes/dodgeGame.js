@@ -77,6 +77,26 @@ export default class DodgeGame extends Phaser.Scene {
     this.load.audio("musicBack", musicBack);
     this.load.audio("gameOver", gameOver);
     this.load.audio("ooGnome", ooGnome);
+    this.enterName();
+  }
+
+  enterName(tooLong) {
+    let name;
+
+    if (tooLong) {
+      name = prompt(
+        "Nickname was too long, please enter a new one",
+        `Enter your name here`
+      );
+    } else {
+      name = prompt("Enter Your Nickname");
+    }
+
+    if (name.length > 8) {
+      this.enterName(true);
+    } else {
+      this.yourName = name;
+    }
   }
 
   spikeCollision() {
@@ -330,48 +350,24 @@ export default class DodgeGame extends Phaser.Scene {
   gameOverFunc() {
     //
 
-    this.name = this.add.text(390, 290, "Enter your name:", {
+    this.name = this.add.text(390, 290, `${this.yourName} you scored:`, {
       fontSize: "50px",
       fill: "#f6ff00"
     });
 
-    this.textEntry = this.add.text(570, 340, "temp", {
-      fontSize: "50px",
-      fill: "#fff"
-    });
-
-    this.BACKSPACE = this.add.text(577, 390, "Delete", {
-      fontSize: "30px",
-      fill: "#f6ff00"
-    });
-
-    // keys = this.input.keyboard.addKeys('A,B,C');
-
-    this.keySpace = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.SPACE
-    );
-    this.keyBackspace = this.input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.BACKSPACE
+    this.textEntry = this.add.text(
+      570,
+      340,
+      `${Number(Math.floor(this.timer / 50))} points !`,
+      {
+        fontSize: "50px",
+        fill: "#fff"
+      }
     );
 
-    if (this.listener < 1) {
-      this.keyboardListener = this.input.keyboard.on("keydown", event => {
-        if (event.keyCode === 8 && this.textEntry.text.length > 0) {
-          this.textEntry.text = this.textEntry.text.substr(
-            0,
-            this.textEntry.text.length - 1
-          );
-        } else if (event.keyCode >= 48 && event.keyCode < 90) {
-          if (this.textEntry.text.length < 4) {
-            this.textEntry.text += event.key;
-          }
-        }
-      });
-      this.listener++;
-    }
-    //
     this.gameOver = "Ended";
 
+    console.log(this.yourName);
     this.replayButtonFunc();
   }
 
@@ -419,19 +415,15 @@ export default class DodgeGame extends Phaser.Scene {
     this.replayButton.setInteractive();
     this.spikes.children.entries = [];
     this.replayButton.on("clicked", () => {
-      let score = Number(Math.floor(this.timer / 50));
-      let name = this.textEntry.text;
-      let data = { score: Number(score), name: name };
+      //auth.createNewScore("bubu", 1000);
 
+      let score = Number(Math.floor(this.timer / 50));
+      let data = { score: Number(score), name: this.yourName };
       auth.createScore(data).then(userData => {
         this.updateScores();
       });
-      //auth.createNewScore("bubu", 1000);
 
-      this.name.destroy(),
-        this.textEntry.destroy(),
-        this.BACKSPACE.destroy(),
-        this.resetVars();
+      this.name.destroy(), this.textEntry.destroy(), this.resetVars();
     });
   }
 
