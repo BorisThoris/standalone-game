@@ -44,6 +44,8 @@ export default class DodgeGame extends Phaser.Scene {
     this.gameOverMusic = null;
     this.ooGnome = null;
     this.textEntry = null;
+    this.scores = null;
+    this.minScore;
 
     //Variables with default values
     this.score = 0;
@@ -127,7 +129,7 @@ export default class DodgeGame extends Phaser.Scene {
   updateScores() {
     auth.getAllScores().then(data => {
       data.sort((a, b) => Number(b.score) - Number(a.score));
-
+      this.scores = data;
       this.score1.setText(`${data[0].name}: ${data[0].score}`);
       this.score2.setText(`${data[1].name}: ${data[1].score}`);
       this.score3.setText(`${data[2].name}: ${data[2].score}`);
@@ -137,6 +139,19 @@ export default class DodgeGame extends Phaser.Scene {
       this.score7.setText(`${data[6].name}: ${data[6].score}`);
       this.score8.setText(`${data[7].name}: ${data[7].score}`);
     });
+  }
+
+  checkMin() {
+    let score = Number(Math.floor(this.timer / 50));
+
+    // let result = this.scores.map(Number(this.scores.score));
+    // console.log(result);
+
+    let tempArr = this.scores.map(score => {
+      return parseInt(score.score, 10);
+    });
+
+    return Math.min(...tempArr);
   }
 
   settupPhysics() {
@@ -367,7 +382,6 @@ export default class DodgeGame extends Phaser.Scene {
 
     this.gameOver = "Ended";
 
-    console.log(this.yourName);
     this.replayButtonFunc();
   }
 
@@ -414,14 +428,20 @@ export default class DodgeGame extends Phaser.Scene {
     this.replayButton.setScale(0.2);
     this.replayButton.setInteractive();
     this.spikes.children.entries = [];
+
     this.replayButton.on("clicked", () => {
       //auth.createNewScore("bubu", 1000);
 
       let score = Number(Math.floor(this.timer / 50));
-      let data = { score: Number(score), name: this.yourName };
-      auth.createScore(data).then(userData => {
-        this.updateScores();
-      });
+      let min = this.checkMin();
+
+      if (score > min) {
+        let data = { score: Number(score), name: this.yourName };
+        auth.createScore(data).then(userData => {
+          this.updateScores();
+          console.log("score created");
+        });
+      }
 
       this.name.destroy(), this.textEntry.destroy(), this.resetVars();
     });
