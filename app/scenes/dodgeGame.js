@@ -99,7 +99,7 @@ export default class DodgeGame extends Phaser.Scene {
         auth.saveSession(userData);
         console.log(":) logged in");
       })
-      .catch(() => console.log(":) error"));
+      .catch(() => console.log(":( log in error"));
 
     this.updateScores();
   }
@@ -275,8 +275,6 @@ export default class DodgeGame extends Phaser.Scene {
     object.on("pointerout", (pointer, event) => {
       cursor.isDown = false;
       cursor.isUp = true;
-      console.log(pointer);
-      console.log(event);
     });
   }
 
@@ -289,7 +287,44 @@ export default class DodgeGame extends Phaser.Scene {
   }
 
   addPowerUp() {
-    this.powerUps.create(Math.random() * 1280, -100, "powerUp").setScale(0.15);
+    let random = Math.floor(Math.random() * 6);
+    switch (random) {
+      case 0:
+        this.powerUps
+          .create(Math.random() * 1280, -100, "reverse 500")
+          .setScale(0.2);
+        break;
+
+      case 1:
+        this.powerUps
+          .create(Math.random() * 1280, -100, "reverse 700")
+          .setScale(0.2);
+        break;
+
+      case 2:
+        this.powerUps
+          .create(Math.random() * 1280, -100, "reverse 1000")
+          .setScale(0.2);
+        break;
+
+      case 3:
+        this.powerUps
+          .create(Math.random() * 1280, -100, "powerUp 500")
+          .setScale(0.2);
+        break;
+
+      case 4:
+        this.powerUps
+          .create(Math.random() * 1280, -100, "powerUp 700")
+          .setScale(0.2);
+        break;
+
+      case 5:
+        this.powerUps
+          .create(Math.random() * 1280, -100, "powerUp 1000")
+          .setScale(0.2);
+        break;
+    }
   }
 
   gameOverFunc() {
