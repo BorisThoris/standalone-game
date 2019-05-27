@@ -84,12 +84,12 @@ export default class DodgeGame extends Phaser.Scene {
     let name;
 
     if (tooLong) {
-      name = prompt(
+      name = window.prompt(
         "Nickname was too long, please enter a new one",
-        `Enter your name here`
+        "Enter your name here"
       );
     } else {
-      name = prompt("Enter Your Nickname");
+      name = window.prompt("Enter Your Nickname");
     }
 
     if (name.length > 8) {
