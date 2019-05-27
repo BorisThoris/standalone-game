@@ -257,10 +257,17 @@ export default class DodgeGame extends Phaser.Scene {
   }
 
   addTouchControls(object, cursor) {
-    object.on("pointerdown", () => {
-      cursor.isDown = true;
-      cursor.isUp = false;
-    });
+    object.on(
+      "pointerdown",
+      () => {
+        cursor.isDown = true;
+        cursor.isUp = false;
+      },
+      () => {
+        cursor.isDown = false;
+        cursor.isUp = true;
+      }
+    );
     object.on("pointerup", () => {
       cursor.isDown = false;
       cursor.isUp = true;
