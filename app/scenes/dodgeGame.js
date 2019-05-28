@@ -90,12 +90,16 @@ export default class DodgeGame extends Phaser.Scene {
         "Nickname was too long, please enter a new one",
         "Enter your name here"
       );
+    } else if (!tooLong) {
+      name = window.prompt("Name can't be empty");
     } else {
       name = window.prompt("Enter Your Nickname");
     }
 
     if (name.length > 8) {
       this.enterName(true);
+    } else if (name.length === 0) {
+      this.enterName(false);
     } else {
       this.yourName = name;
     }
