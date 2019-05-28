@@ -151,7 +151,12 @@ export default class DodgeGame extends Phaser.Scene {
       return parseInt(score.score, 10);
     });
 
-    return Math.min(...tempArr);
+    console.log(this.scores[this.scores.length - 1]._id);
+
+    return {
+      id: this.scores[this.scores.length - 1]._id,
+      score: this.scores[this.scores.length - 1].score
+    };
   }
 
   settupPhysics() {
@@ -433,14 +438,22 @@ export default class DodgeGame extends Phaser.Scene {
       //auth.createNewScore("bubu", 1000);
 
       let score = Number(Math.floor(this.timer / 50));
-      let min = this.checkMin();
+      let minScore = this.checkMin();
+      console.log(minScore);
 
-      if (score > min) {
+      if (score > minScore.score) {
         let data = { score: Number(score), name: this.yourName };
-        auth.createScore(data).then(userData => {
-          this.updateScores();
-          console.log("score created");
-        });
+        auth
+          .createScore(data)
+          .then(userData => {
+            auth.deleteScore(minScore.id);
+            console.log("deletedScore");
+            this.updateScores();
+            console.log("score created");
+          })
+          .catch(err => {
+            console.log(err);
+          });
       }
 
       this.name.destroy(), this.textEntry.destroy(), this.resetVars();

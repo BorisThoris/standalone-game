@@ -16,4 +16,5 @@ canvas {
   display: inline-block;
   width: 100vw !important;
   height: 100vh !important;
+  transition: 0.5s;
 }

@@ -54,6 +54,7 @@ let auth = (() => {
   }
 
   function createScore(data) {
+    // POST /appdata/:appKey/:collectionName HTTP/1.1
     return remote.post("appdata", "scores", "kinvey", data);
   }
 
@@ -61,6 +62,12 @@ let auth = (() => {
     const endpoint = 'scores?query={}&sort={"score": -1}';
 
     return remote.get("appdata", endpoint, "kinvey");
+  }
+
+  function deleteScore(scoreId) {
+    const endpoint = `scores/${scoreId}`;
+
+    return remote.remove("appdata", endpoint, "kinvey");
   }
 
   return {
@@ -73,7 +80,8 @@ let auth = (() => {
     createScore,
     getAllScores,
     loginNew,
-    createNewScore
+    createNewScore,
+    deleteScore
   };
 })();
 export default auth;
