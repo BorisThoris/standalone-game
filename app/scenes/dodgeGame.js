@@ -119,11 +119,10 @@ export default class DodgeGame extends Phaser.Scene {
       .login("sad", "sad")
       .then(userData => {
         auth.saveSession(userData);
+        this.updateScores();
         console.log(":) logged in");
       })
       .catch(() => console.log(":( log in error"));
-
-    this.updateScores();
   }
 
   updateScores() {
