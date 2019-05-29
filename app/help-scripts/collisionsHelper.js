@@ -5,11 +5,9 @@ export default class collisiosnHelper {
   }
 
   // Power up collision
-  powerUpsCollision(tempPowerUp) {
+  powerUpsCollision(tempPowerUp, type, ammount) {
     if (this.player.body.touching.up) {
       console.log(tempPowerUp.texture.key);
-      let type = tempPowerUp.texture.key.split(" ")[0];
-      let ammount = tempPowerUp.texture.key.split(" ")[1];
       console.log(`type: ${type} ammount: ${ammount}`);
 
       tempPowerUp.active = false;

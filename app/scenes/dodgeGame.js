@@ -9,6 +9,7 @@ import spriteSheethelper from "../help-scripts/loadSpriteSheets";
 import imageHelper from "../help-scripts/loadImages";
 import animationsHelper from "../help-scripts/animationsHelper";
 import auth from "../services/auth-service.js";
+import powerUpTextHelper from "../help-scripts/powerUpText";
 
 const style2 = {
   font: "bold 40px Arial",
@@ -178,8 +179,13 @@ export default class DodgeGame extends Phaser.Scene {
     this.physics.add.collider(
       this.powerUps,
       this.player,
-      (player, tempPowerUp) =>
-        this.collisionHelper.powerUpsCollision(tempPowerUp)
+      (player, tempPowerUp) => {
+        console.log(`:)))))) ${tempPowerUp.texture.key}`);
+        let type = tempPowerUp.texture.key.split(" ")[0];
+        let ammount = tempPowerUp.texture.key.split(" ")[1];
+        this.collisionHelper.powerUpsCollision(tempPowerUp, type, ammount);
+        this.powerUpTextHelper.powerUpText(type, ammount);
+      }
     );
 
     this.physics.add.collider(this.player, this.platforms);
@@ -237,12 +243,15 @@ export default class DodgeGame extends Phaser.Scene {
       this
     );
 
+    const alpha = 0.3;
+
     //Touch Arrows
     /*   Arrow Left   */
     //390
     //613
     this.left = this.add.image(320, 330, "baseTouchKey");
     this.left.setScale(1.25);
+    this.left.alpha = alpha;
     this.left.angle -= 90;
     this.left.setInteractive();
     this.addTouchControls(this.left, this.cursors.left);
@@ -252,7 +261,7 @@ export default class DodgeGame extends Phaser.Scene {
     //613
     this.right = this.add.image(960, 330, "baseTouchKey");
     this.right.setScale(1.25);
-    this.right.opacity = 0.6;
+    this.right.alpha = alpha;
     this.right.angle -= 270;
     this.right.setInteractive();
 
@@ -263,12 +272,14 @@ export default class DodgeGame extends Phaser.Scene {
     //523
     this.arrowUp = this.add.image(640, 100, "baseTouchKey");
     this.arrowUp.setScale(0.4);
+    this.arrowUp.alpha = alpha;
     this.arrowUp.setInteractive();
     this.addTouchControls(this.arrowUp, this.cursors.up);
 
     /*   Arrow Down   */
     this.down = this.add.image(640, 550, "baseTouchKey");
     this.down.setScale(0.4);
+    this.down.alpha = alpha;
     this.down.angle -= 180;
     this.down.setInteractive();
     this.addTouchControls(this.down, this.cursors.down);
@@ -283,8 +294,20 @@ export default class DodgeGame extends Phaser.Scene {
       "mummy"
     );
 
+    let target = this.add.text(430, 290, "Text", {
+      fontSize: "70px",
+      fill: "#f6ff00"
+    });
+
+    target.alpha = 0;
+
     //Setting Up Helpers
     this.playerMovementHelper = new PlayerMover(this.player);
+    this.powerUpTextHelper = new powerUpTextHelper(
+      this.player,
+      target,
+      this.add
+    );
     this.collisionHelper = new CollisionsHelper(
       this.player,
       this.playerMovementHelper
@@ -379,7 +402,7 @@ export default class DodgeGame extends Phaser.Scene {
     });
 
     this.textEntry = this.add.text(
-      570,
+      500,
       340,
       `${Number(Math.floor(this.timer / 50))} points !`,
       {
