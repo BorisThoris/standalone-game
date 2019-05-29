@@ -25,7 +25,7 @@ export default class spriteSheetHelper {
       this.add.tween({
         targets: this.textTemplate,
         ease: "Sine.easeInOut",
-        duration: 500,
+        duration: 1000,
         y: Math.random() * 300,
         delay: 0,
         alpha: 1,
