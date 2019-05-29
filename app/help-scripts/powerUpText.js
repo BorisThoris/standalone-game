@@ -6,9 +6,9 @@ export default class spriteSheetHelper {
   }
 
   powerUpText(Text, ammount) {
-    if (this.player.body.touching.up) {
-      console.log(":)");
-
+    if (Text === "star") {
+      this.textTemplate.text = "Invincibility";
+    } else if (this.player.body.touching.up) {
       switch (Text) {
         case "reverse":
           this.textTemplate.text = "ReVeRsEd";
@@ -25,8 +25,10 @@ export default class spriteSheetHelper {
       this.add.tween({
         targets: this.textTemplate,
         ease: "Sine.easeInOut",
+        yoyo: true,
         duration: 1000,
         y: Math.random() * 300,
+        x: Math.random() * 900,
         delay: 0,
         alpha: 1,
         scale: Math.random() * 2,

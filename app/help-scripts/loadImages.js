@@ -4,6 +4,7 @@ import spikeBall from "../assets/spikeball.png";
 import replay from "../assets/replayBtn.png";
 import powerUp from "../assets/powerUp.png";
 import touchArrow from "../assets/touchScreenKey2.png";
+import star from "../assets/star.png";
 
 import reverseNorm from "../assets/reverse500.png";
 import reverse700 from "../assets/reverse700.png";
@@ -22,6 +23,7 @@ export default class loadImages {
     data.image("replay", replay);
     data.image("powerUp", powerUp);
     data.image("baseTouchKey", touchArrow);
+    data.image("star 0", star);
 
     data.image("reverse 500", reverseNorm);
     data.image("reverse 700", reverse700);

@@ -56,6 +56,7 @@ export default class DodgeGame extends Phaser.Scene {
     this.crouched = false;
     this.spikeMax = 0.4;
     this.listener = 0;
+    this.lives = 3;
 
     //this.player vars
     this.playerHeight = 225;
@@ -106,16 +107,21 @@ export default class DodgeGame extends Phaser.Scene {
     }
   }
 
-  spikeCollision() {
+  spikeCollision(tempSpike) {
     //On Collision with enemy
     if (this.player.body.touching.up) {
-      //Stop BG this.music and play game over this.music
-      this.music.pause();
-      this.gameOverMusic.play();
+      tempSpike.destroy();
+      if (this.lives <= 0) {
+        //Stop BG this.music and play game over this.music
+        this.music.pause();
+        this.gameOverMusic.play();
 
-      let score = Math.floor(this.timer / 50);
+        let score = Math.floor(this.timer / 50);
 
-      this.gameOverFunc();
+        this.gameOverFunc();
+      }
+      this.lives--;
+      this.livesText.setText("Lives: " + this.lives);
     }
   }
 
@@ -171,8 +177,8 @@ export default class DodgeGame extends Phaser.Scene {
 
     this.physics.add.collider(this.spikes, this.powerUps);
     this.physics.add.collider(this.powerUps, this.powerUps);
-    this.physics.add.collider(this.spikes, this.player, () =>
-      this.spikeCollision()
+    this.physics.add.collider(this.spikes, this.player, (player, tempSpike) =>
+      this.spikeCollision(tempSpike)
     );
     this.physics.add.collider(
       this.powerUps,
@@ -192,6 +198,11 @@ export default class DodgeGame extends Phaser.Scene {
     this.scoreText = this.add.text(16, 16, "score: 0", {
       fontSize: "62px",
       fill: "#f6ff00"
+    });
+
+    this.livesText = this.add.text(16, 76, `Lives: ${this.lives}`, {
+      fontSize: "62px",
+      fill: "#fff"
     });
 
     this.score0 = this.add.text(text0.x, text0.y, "Highest Scores", style2);
@@ -307,7 +318,8 @@ export default class DodgeGame extends Phaser.Scene {
     );
     this.collisionHelper = new CollisionsHelper(
       this.player,
-      this.playerMovementHelper
+      this.playerMovementHelper,
+      this.lives
     );
 
     //This.player physics properties
@@ -350,42 +362,63 @@ export default class DodgeGame extends Phaser.Scene {
   }
 
   addPowerUp() {
-    let random = Math.floor(Math.random() * 6);
+    let random = Math.floor(Math.random() * 9);
+    let scaleNumb = Math.random() * 0.14 + 0.1;
     switch (random) {
       case 0:
         this.powerUps
           .create(Math.random() * 1280, -100, "reverse 500")
-          .setScale(0.2);
+          .setScale(scaleNumb);
         break;
 
       case 1:
         this.powerUps
           .create(Math.random() * 1280, -100, "reverse 700")
-          .setScale(0.2);
+          .setScale(scaleNumb);
         break;
 
       case 2:
         this.powerUps
           .create(Math.random() * 1280, -100, "reverse 1000")
-          .setScale(0.2);
+          .setScale(scaleNumb);
         break;
 
       case 3:
         this.powerUps
           .create(Math.random() * 1280, -100, "powerUp 500")
-          .setScale(0.2);
+          .setScale(scaleNumb);
         break;
 
       case 4:
         this.powerUps
           .create(Math.random() * 1280, -100, "powerUp 700")
-          .setScale(0.2);
+          .setScale(scaleNumb);
         break;
 
       case 5:
         this.powerUps
-          .create(Math.random() * 1280, -100, "powerUp 1000")
-          .setScale(0.2);
+          .create(Math.random() * 1280, -100, "reverse 500")
+          .setScale(scaleNumb);
+        break;
+
+      case 6:
+        this.powerUps
+          .create(Math.random() * 1280, -100, "powerUp 500")
+          .setScale(scaleNumb);
+        break;
+
+      case 7:
+        this.powerUps
+          .create(Math.random() * 1280, -100, "powerUp 700")
+          .setScale(scaleNumb);
+        break;
+
+      case 8:
+        let numb = Math.floor(Math.random() * 3);
+        if (numb === 2)
+          this.powerUps
+            .create(Math.random() * 1280, -100, "star 0")
+            .setScale(0.12);
         break;
     }
   }
@@ -432,6 +465,7 @@ export default class DodgeGame extends Phaser.Scene {
 
   resetVars() {
     this.timer = 0;
+    this.lives = 3;
     this.walkSpeed = 500;
     this.croutchSpeed = this.walkSpeed - 100;
     this.spikeMax = 0.4;
@@ -439,6 +473,7 @@ export default class DodgeGame extends Phaser.Scene {
     this.replayButton.destroy();
     this.music.play();
     this.playerMovementHelper.reset();
+    this.livesText.setText("Lives: " + this.lives);
   }
 
   replayButtonFunc() {
