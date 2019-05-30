@@ -20,13 +20,18 @@ export default class spriteSheetHelper {
           } else this.textTemplate.text = "Speed Boost";
 
           break;
+
+        case "spikeHit":
+          this.textTemplate.text = "Hit";
+          this.textTemplate.fill = "#FF0000";
+          break;
       }
 
       this.add.tween({
         targets: this.textTemplate,
         ease: "Sine.easeInOut",
         yoyo: true,
-        duration: 1000,
+        duration: 1500,
         y: Math.random() * 300,
         x: Math.random() * 900,
         delay: 0,
@@ -35,6 +40,8 @@ export default class spriteSheetHelper {
         onComplete: () => {
           this.textTemplate.alpha = 0;
           this.textTemplate.y = 290;
+          this.textTemplate.x = 430;
+          this.textTemplate.fill = "#ffffff";
         }
       });
     }

@@ -1,17 +1,17 @@
 export default class collisiosnHelper {
-  constructor(player, playerMovementHelper, lives) {
+  constructor(player, playerMovementHelper) {
     this.player = player;
     this.playerMovementHelper = playerMovementHelper;
-    this.lives = lives;
   }
 
   // Power up collision
-  powerUpsCollision(tempPowerUp, type, ammount) {
-    console.log(this.lives);
+  powerUpsCollision(tempPowerUp, type, ammount, lives) {
     if (type === "star") {
       this.destroy(tempPowerUp);
+      lives = lives + 1;
 
-      console.log(this.player);
+      return lives;
+      console.log(lives);
     } else if (this.player.body.touching.up) {
       this.destroy(tempPowerUp);
 
@@ -30,7 +30,7 @@ export default class collisiosnHelper {
       // if (powerUp === 1) {
       //   this.playerMovementHelper.updateSpeed(-500);
       // } else if (powerUp === 2) {
-      //   this.playerMovementHelper.updateSpeed(500);
+      //   th is.playerMovementHelper.updateSpeed(500);
       // } else if (powerUp === 3) {
       //   this.playerMovementHelper.updateSpeed(700);
       // } else if (powerUp === 4) {

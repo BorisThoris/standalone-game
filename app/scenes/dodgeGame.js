@@ -46,7 +46,9 @@ export default class DodgeGame extends Phaser.Scene {
     this.ooGnome = null;
     this.textEntry = null;
     this.scores = null;
+    this.target;
     this.minScore;
+    this.yourName;
 
     //Variables with default values
     this.score = 0;
@@ -84,6 +86,11 @@ export default class DodgeGame extends Phaser.Scene {
     this.enterName();
   }
 
+  addLive() {
+    console.log("live func invoked");
+    this.lives++;
+  }
+
   enterName(tooLong) {
     let name;
 
@@ -119,10 +126,30 @@ export default class DodgeGame extends Phaser.Scene {
         let score = Math.floor(this.timer / 50);
 
         this.gameOverFunc();
+        return;
       }
+      this.powerUpTextHelper.powerUpText("spikeHit", "0");
       this.lives--;
       this.livesText.setText("Lives: " + this.lives);
     }
+  }
+
+  powerUpCollision(player, tempPowerUp) {
+    let type = tempPowerUp.texture.key.split(" ")[0];
+    let ammount = tempPowerUp.texture.key.split(" ")[1];
+    let tempLives = this.collisionHelper.powerUpsCollision(
+      tempPowerUp,
+      type,
+      ammount,
+      this.lives
+    );
+
+    if (tempLives !== undefined) {
+      this.lives = tempLives;
+    }
+
+    this.livesText.setText("Lives: " + this.lives);
+    this.powerUpTextHelper.powerUpText(type, ammount);
   }
 
   initialAuth() {
@@ -131,6 +158,8 @@ export default class DodgeGame extends Phaser.Scene {
       .then(userData => {
         auth.saveSession(userData);
         this.updateScores();
+        var d = new Date();
+        auth.postLogData({ name: this.yourName, date: d });
         console.log(":) logged in");
       })
       .catch(() => console.log(":( log in error"));
@@ -183,12 +212,7 @@ export default class DodgeGame extends Phaser.Scene {
     this.physics.add.collider(
       this.powerUps,
       this.player,
-      (player, tempPowerUp) => {
-        let type = tempPowerUp.texture.key.split(" ")[0];
-        let ammount = tempPowerUp.texture.key.split(" ")[1];
-        this.collisionHelper.powerUpsCollision(tempPowerUp, type, ammount);
-        this.powerUpTextHelper.powerUpText(type, ammount);
-      }
+      (player, tempPowerUp) => this.powerUpCollision(player, tempPowerUp)
     );
 
     this.physics.add.collider(this.player, this.platforms);
@@ -302,24 +326,25 @@ export default class DodgeGame extends Phaser.Scene {
       "mummy"
     );
 
-    let target = this.add.text(430, 290, "Text", {
+    this.target = this.add.text(430, 290, "Text", {
       fontSize: "70px",
       fill: "#f6ff00"
     });
 
-    target.alpha = 0;
+    this.target.alpha = 0;
 
     //Setting Up Helpers
     this.playerMovementHelper = new PlayerMover(this.player);
     this.powerUpTextHelper = new powerUpTextHelper(
       this.player,
-      target,
+      this.target,
       this.add
     );
     this.collisionHelper = new CollisionsHelper(
       this.player,
       this.playerMovementHelper,
-      this.lives
+      this.lives,
+      this.addLive
     );
 
     //This.player physics properties
@@ -329,6 +354,9 @@ export default class DodgeGame extends Phaser.Scene {
     //Collisions
     this.settupPhysics();
     this.player.setSize(600, this.playerHeight, true);
+
+    this.replayButton = this.add.sprite(1280 / 2 - 200, 70, "replay");
+    this.replayButton.setScale(0.125);
   }
 
   addTouchControls(object, cursor) {
@@ -397,7 +425,7 @@ export default class DodgeGame extends Phaser.Scene {
 
       case 5:
         this.powerUps
-          .create(Math.random() * 1280, -100, "reverse 500")
+          .create(Math.random() * 1280, -100, "reverse 1000")
           .setScale(scaleNumb);
         break;
 
@@ -473,22 +501,33 @@ export default class DodgeGame extends Phaser.Scene {
     this.replayButton.destroy();
     this.music.play();
     this.playerMovementHelper.reset();
+
     this.livesText.setText("Lives: " + this.lives);
   }
 
   replayButtonFunc() {
-    this.replayButton = this.add.sprite(1280 / 2, 540, "replay");
     this.add.tween({
       targets: this.replayButton,
       ease: "Sine.easeInOut",
+      y: 540,
+      x: 640,
       duration: 2000,
       delay: 0,
       alpha: 0,
-      repeat: -1
+      onComplete: () => {
+        this.replayButton.setScale(0.2);
+        this.add.tween({
+          targets: this.replayButton,
+          ease: "Sine.easeInOut",
+          duration: 2000,
+          delay: 0,
+          alpha: 1,
+          yoyo: true,
+          repeat: -1
+        });
+      }
     });
 
-    this.replayButton.opacity = 0;
-    this.replayButton.setScale(0.2);
     this.replayButton.setInteractive();
     this.spikes.children.entries = [];
 

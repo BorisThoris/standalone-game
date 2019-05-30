@@ -58,6 +58,11 @@ let auth = (() => {
     return remote.post("appdata", "scores", "kinvey", data);
   }
 
+  function postLogData(data) {
+    // POST /appdata/:appKey/:collectionName HTTP/1.1
+    return remote.post("appdata", "analytics", "kinvey", data);
+  }
+
   function getAllScores() {
     const endpoint = 'scores?query={}&sort={"score": -1}';
 
@@ -80,6 +85,7 @@ let auth = (() => {
     createScore,
     getAllScores,
     loginNew,
+    postLogData,
     createNewScore,
     deleteScore
   };
